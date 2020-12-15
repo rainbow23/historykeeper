@@ -8,6 +8,7 @@ import (
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "Hello World!")
+	io.WriteString(w, os.Getenv("db_host"))
 }
 
 func main() {
