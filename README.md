@@ -1,8 +1,10 @@
-### How to link a folder with an existing Heroku app
+## How to link a folder with an existing Heroku app
 ```
 git:remote -a historykeeper
 ```
-### build process
+----------------------------
+
+## build process
 ```
 govendor init
 govendor fetch +out
@@ -12,10 +14,19 @@ govendor fetch +out
 ```
 web: bin/history_keeper
 ```
-1.vendor/vendor.json
+2.vendor/vendor.json
 ```
  "rootPath": "history_keeper"
 ```
+3. deploy app
+```
+git push -u origin main
+```
+4. open app
+```
+heroku open 
+```
+----------------------------
 
 ### local build process
 
@@ -28,15 +39,15 @@ heroku config:get db_port -s  >> .env
 heroku config:get db_database -s  >> .env
 heroku config:get db_username -s  >> .env
 ```
-1. created bin folder Procfile definition↓
+2. created bin folder Procfile definition↓
 ```
 go build -o bin/history_keeper -v .
 ```
-1. deploy app
+3. deploy app
 ```
 heroku local web
 ```
-1. open app
+4. open app
 ```
 open http://localhost:5000/
 ```
