@@ -1,1 +1,1 @@
-web: bin/hello_golang_on_heroku
+web: bin/history_keeper
