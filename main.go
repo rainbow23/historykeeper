@@ -20,12 +20,15 @@ var DBInfo struct {
 }
 
 func hello(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello World! \n")
-	io.WriteString(w, DBInfo.Host+" <br>>")
-	io.WriteString(w, DBInfo.Username+" <br>>")
-	io.WriteString(w, DBInfo.Password+" <br>>")
-	io.WriteString(w, DBInfo.Port+" <br>>")
-	io.WriteString(w, DBInfo.Database+" <br>>")
+	io.WriteString(w, "HELLO WORLD!\n")
+	output := fmt.Sprintf("Host: %s\nUsername: %s\nPassword: %s\nPort:%s\nDatabase: %s",
+		DBInfo.Host,
+		DBInfo.Username,
+		DBInfo.Password,
+		DBInfo.Port,
+		DBInfo.Database)
+
+	io.WriteString(w, output)
 }
 
 const (
