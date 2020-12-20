@@ -77,8 +77,6 @@ func showStoredZshHistory(w http.ResponseWriter) {
 	// Make a slice for the values
 	values := make([]sql.RawBytes, len(columns))
 
-//test
-
 	scanArgs := make([]interface{}, len(values))
 	for i := range values {
 		scanArgs[i] = &values[i]

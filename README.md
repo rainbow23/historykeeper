@@ -1,3 +1,7 @@
+# How to link a folder with an existing Heroku app
+## git:remote -a historykeeper
+
+
 # local build process
 
 create .env file
