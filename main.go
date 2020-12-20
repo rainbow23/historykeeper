@@ -40,7 +40,8 @@ const (
 func main() {
 	prepare()
 	http.HandleFunc("/", hello)
-	http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+	http.ListenAndServe(":"+port, nil)
 }
 
 func dbProcess() {
