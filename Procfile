@@ -1,1 +1,1 @@
-web: history-keeper
+web: hello_golang_on_heroku
