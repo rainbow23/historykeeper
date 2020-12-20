@@ -136,10 +136,9 @@ func dbProcess() {
 }
 
 func prepare() {
-	DBInfo.Port = os.Getenv("PORT")
-	DBInfo.Host = os.Getenv("Db.host")
-	DBInfo.Database = os.Getenv("Db.database")
-	DBInfo.Password = os.Getenv("Db.password")
-	DBInfo.Port = os.Getenv("Db.port")
-	DBInfo.Username = os.Getenv("Db.username")
+	DBInfo.Host = os.Getenv("db_host")
+	DBInfo.Username = os.Getenv("db_username")
+	DBInfo.Password = os.Getenv("db_password")
+	DBInfo.Port = os.Getenv("db_port")
+	DBInfo.Database = os.Getenv("db_database")
 }
