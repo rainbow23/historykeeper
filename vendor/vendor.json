@@ -1,6 +1,13 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
+	"package": [
+		{
+			"checksumSHA1": "rD6O1FRhmhGR0+tGc1hh3fsiM04=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "f6dcc3d870a826fb4212f2f124acd2e4658632c5",
+			"revisionTime": "2020-11-27T13:54:36Z"
+		}
+	],
 	"rootPath": "hello_golang_on_heroku"
 }
