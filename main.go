@@ -21,14 +21,15 @@ var DBInfo struct {
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "HELLO WORLD!\n")
-	output := fmt.Sprintf("Host: %s\nUsername: %s\nPassword: %s\nPort:%s\nDatabase: %s",
-		DBInfo.Host,
-		DBInfo.Username,
-		DBInfo.Password,
-		DBInfo.Port,
-		DBInfo.Database)
+	// output := fmt.Sprintf("Host: %s\nUsername: %s\nPassword: %s\nPort:%s\nDatabase: %s",
+	//     DBInfo.Host,
+	//     DBInfo.Username,
+	//     DBInfo.Password,
+	//     DBInfo.Port,
+	//     DBInfo.Database)
 
-	io.WriteString(w, output)
+	// io.WriteString(w, output)
+	showStoredZshHistory(w)
 }
 
 const (
@@ -47,7 +48,7 @@ func main() {
 	http.ListenAndServe(":"+port, nil)
 }
 
-func dbProcess() {
+func showStoredZshHistory(w http.ResponseWriter) {
 	var Db *sql.DB
 	var err error
 
@@ -89,24 +90,33 @@ func dbProcess() {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 
+		var oneline string
 		// Now do something with the data.
 		// Here we just print each column as a string.
 		var value string
-		for i, col := range values {
+		for _, col := range values {
 			// Here we can check if the value is nil (NULL value)
 			if col == nil {
 				value = "NULL"
 			} else {
 				value = string(col)
 			}
-			fmt.Println(columns[i], ": ", value)
+
+			oneline += "  " + value
+
+			// output := fmt.Sprintf("%s: %s\n", columns[i], value)
+			// io.WriteString(w, output)
 		}
-		fmt.Println("-----------------------------------")
+
+		io.WriteString(w, oneline+"\n")
 	}
+
 	if err = rows.Err(); err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
+}
 
+func insertZshHistory(Db *sql.DB) {
 	fp, err := os.Open(`/Users/rainbow/.zsh_history`)
 	if err != nil {
 		panic(err)
@@ -135,7 +145,6 @@ func dbProcess() {
 	if err := scanner.Err(); err != nil {
 		fmt.Printf("Scanner error: %q\n", err)
 	}
-
 }
 
 func prepare() {
