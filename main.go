@@ -21,15 +21,9 @@ var DBInfo struct {
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "HELLO WORLD!\n")
-	// output := fmt.Sprintf("Host: %s\nUsername: %s\nPassword: %s\nPort:%s\nDatabase: %s",
-	//     DBInfo.Host,
-	//     DBInfo.Username,
-	//     DBInfo.Password,
-	//     DBInfo.Port,
-	//     DBInfo.Database)
-
 	// io.WriteString(w, output)
-	showStoredZshHistory(w)
+	// showStoredZshHistory(w)
+	zshHistory()
 }
 
 const (
@@ -43,9 +37,10 @@ const (
 
 func main() {
 	prepare()
-	http.HandleFunc("/", hello)
-	port := os.Getenv("PORT")
-	http.ListenAndServe(":"+port, nil)
+	// http.HandleFunc("/", hello)
+	// port := os.Getenv("PORT")
+	// http.ListenAndServe(":"+port, nil)
+	zshHistory()
 }
 
 func showStoredZshHistory(w http.ResponseWriter) {
@@ -91,8 +86,6 @@ func showStoredZshHistory(w http.ResponseWriter) {
 		}
 
 		var oneline string
-		// Now do something with the data.
-		// Here we just print each column as a string.
 		var value string
 		for _, col := range values {
 			// Here we can check if the value is nil (NULL value)
