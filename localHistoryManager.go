@@ -26,9 +26,8 @@ type LocalHistoryInfo struct {
 }
 
 type OneLineHistory struct {
-	timestamp int
-	nsec      int
-	command   string
+	date    string
+	command string
 }
 
 func fetchLocalHistory() {
@@ -49,9 +48,18 @@ func fetchLocalHistory() {
 	for scanner.Scan() {
 		fmt.Println("-----------------------------------")
 		timeStamp, nSec, command := separateOneLine(scanner.Text())
-		fmt.Println(timeStamp)
-		fmt.Println(nSec)
-		fmt.Println(command)
+		// fmt.Println(timeStamp)
+		// fmt.Println(nSec)
+		// fmt.Println(command)
+
+		// (convertTimeStampToDate(timeStamp, nSec))
+		date := convertTimeStampToDate(timeStamp, nSec)
+		// fmt.Println(date)
+		// fmt.Printf("HOGE=%s\n", date)
+
+		oneLineHistory := OneLineHistory{date, command}
+		fmt.Printf("HOGE=%s\n", oneLineHistory.command)
+		fmt.Printf("HOGE=%s\n", oneLineHistory.date)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -59,51 +67,49 @@ func fetchLocalHistory() {
 	}
 }
 
-func separateOneLine(oneline string) (timeStamp int64, nSec int, command string) {
-	fmt.Println(oneline)
+func separateOneLine(oneline string) (timeStamp int64, nSec int64, command string) {
+	// fmt.Println(oneline)
 	patternTimeStamp := `[0-9]{10}`
-	timeStampStr := cutOffOneline(patternTimeStamp, oneline)
-	timeStamp, _ = strconv.ParseInt(timeStampStr, 10, 64)
+	if isFoundPattern(patternTimeStamp, oneline) {
+		timeStampStr := cutOffOneline(patternTimeStamp, oneline)
+		timeStamp, _ = strconv.ParseInt(timeStampStr, 10, 64)
+	}
 
 	patternNsec := `:[0-9];+`
-	nSecStr := cutOffOneline(patternNsec, oneline)
-	nSecStr = strings.TrimLeft(nSecStr, ":")
-	nSecStr = strings.TrimRight(nSecStr, ";")
-	nSec, _ = strconv.Atoi(nSecStr)
+	if isFoundPattern(patternNsec, oneline) {
+		nSecStr := cutOffOneline(patternNsec, oneline)
+		nSecStr = strings.TrimLeft(nSecStr, ":")
+		nSecStr = strings.TrimRight(nSecStr, ";")
+		nSec, _ = strconv.ParseInt(nSecStr, 10, 64)
+	}
 
 	patternCommand := "[0-9];.*$"
-	command = cutOffOneline(patternCommand, oneline)
-	command = command[2:]
+	if isFoundPattern(patternCommand, oneline) {
+		command = cutOffOneline(patternCommand, oneline)
+		command = command[2:]
+	}
 
 	return
 }
 
-func cutOffOneline(regexPattern string, material string) string {
-	// match, _ := regexp.MatchString(regexPattern, material)
-	regexp := regexp.MustCompile(regexPattern)
-	res := regexp.FindAllStringSubmatch(material, 1)
-	return res[0][0]
+func isFoundPattern(regexPattern string, material string) bool {
+	match, _ := regexp.MatchString(regexPattern, material)
+	return match
 }
 
-func test() {
-	oneline := "hoge:0045-111-2222 boke:0045-222-2222"
-	fmt.Println(oneline)
-
-	pattern := `[\d\-]+`
-	match, _ := regexp.MatchString(pattern, oneline)
-	fmt.Println(match)
-
-	rep := regexp.MustCompile(pattern)
-
-	result := rep.Split(oneline, 1)
-	fmt.Println(result[0])
-
-	r := regexp.MustCompile(pattern)
-	fmt.Println(r.FindAllStringSubmatch(oneline, -1)) // => "[[0045-111-2222] [0045-222-2222]]"
+func cutOffOneline(regexPattern string, oneLine string) string {
+	regexp := regexp.MustCompile(regexPattern)
+	res := regexp.FindAllStringSubmatch(oneLine, 1)
+	// fmt.Println(res)
+	if res != nil {
+		return res[0][0]
+	}
+	return "noFound"
 }
 
 func convertTimeStampToDate(timeStamp int64, nsec int64) string {
-	timeStr := time.Unix(timeStamp, nsec).Format("2006.01.02 15:04:05")
-	// timeStr := time.Unix(1608972693, 0).Format("2006.01.02 15:04:05")
-	return timeStr
+	if timeStamp != 0 {
+		return time.Unix(timeStamp, nsec).Format("2006.01.02 15:04:05")
+	}
+	return ""
 }
