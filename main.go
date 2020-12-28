@@ -42,5 +42,9 @@ func prepare() {
 	DBInfo.Database = os.Getenv("db_database")
 
 	linesHistory := localHistory.FetchLocalHistory()
-	fmt.Println(linesHistory)
+	for _, line := range linesHistory {
+		fmt.Println(line.Date)
+		fmt.Println(line.Command)
+	}
+	// fmt.Println(linesHistory)
 }
