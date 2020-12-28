@@ -21,9 +21,9 @@ const (
 	maxBufSize = 1000000
 )
 
-// type LocalHistoryInfo struct {
-//     historyList []OneLineHistory
-// }
+type LocalHistoryInfo struct {
+	historyList []OneLineHistory
+}
 
 type LinesHistory []OneLineHistory
 
@@ -33,7 +33,7 @@ type OneLineHistory struct {
 }
 
 func FetchLocalHistory() (linesHistory LinesHistory) {
-	fp, err := os.Open(HistoryFilePath)
+	fp, err := os.Open(historyFilePath)
 	defer fp.Close()
 
 	if err != nil {

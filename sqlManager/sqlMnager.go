@@ -1,20 +1,38 @@
-package main
+package sqlManager
 
 import (
 	// "bufio"
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
+	"historyKeeper/localHistory"
 	// "io"
 	// "net/http"
-	// "os"
+	"os"
 	"time"
 )
+
+var dBInfo struct {
+	host     string
+	username string
+	password string
+	port     string
+	database string
+}
+
+func Prepare() {
+	dBInfo.host = os.Getenv("db_host")
+	dBInfo.username = os.Getenv("db_username")
+	dBInfo.password = os.Getenv("db_password")
+	dBInfo.port = os.Getenv("db_port")
+	dBInfo.database = os.Getenv("db_database")
+}
 
 func sqlConnect() *sql.DB {
 	var Db *sql.DB
 	var err error
 
-	Db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DBInfo.Username, DBInfo.Password, DBInfo.Host, DBInfo.Port, DBInfo.Database))
+	Db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dBInfo.username, dBInfo.password, dBInfo.host, dBInfo.port, dBInfo.database))
 	if err != nil {
 		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
@@ -23,17 +41,21 @@ func sqlConnect() *sql.DB {
 	return Db
 }
 
-func insertZshHistory() {
+func InsertZshHistory(linesHistory localHistory.OneLineHistory) {
 	Db := sqlConnect()
 	defer Db.Close()
 
+	fmt.Println(linesHistory)
 	stmtIns, err := Db.Prepare("INSERT INTO shell_history(name) VALUES( ? )") // ? = placeholder
 
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
-	defer stmtIns.Close()        // Close the statement when we leave main() / the program terminates
-	_, err = stmtIns.Exec("aaa") // Insert tuples (i, i^2)
+
+	defer stmtIns.Close() // Close the statement when we leave main() / the program terminates
+
+	// _, err = stmtIns.Exec("aaa") // Insert tuples (i, i^2)
+
 	if err != nil {
 		// panic(err.Error()) // proper error handling instead of panic in your app
 	}
