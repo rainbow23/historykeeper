@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	HistoryFilePath = "/Users/rainbow/.zsh_history"
+	historyFilePath = "/Users/rainbow/.zsh_history"
 
 	// 初期バッファサイズ
 	initialBufSize = 10000
@@ -28,8 +28,8 @@ const (
 type LinesHistory []OneLineHistory
 
 type OneLineHistory struct {
-	date    string
-	command string
+	Date    string
+	Command string
 }
 
 func FetchLocalHistory() (linesHistory LinesHistory) {
