@@ -1,4 +1,4 @@
-package main
+package localHistory
 
 import (
 	"bufio"
@@ -32,7 +32,7 @@ type OneLineHistory struct {
 	command string
 }
 
-func fetchLocalHistory() (linesHistory LinesHistory) {
+func FetchLocalHistory() (linesHistory LinesHistory) {
 	fp, err := os.Open(HistoryFilePath)
 	defer fp.Close()
 

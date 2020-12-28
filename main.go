@@ -5,6 +5,7 @@ import (
 	// "database/sql"
 	"fmt"
 	// _ "github.com/go-sql-driver/mysql"
+	"historyKeeper/localHistory"
 	"io"
 	"net/http"
 	"os"
@@ -18,9 +19,9 @@ var DBInfo struct {
 	Database string
 }
 
-var localHistory struct {
-	historyList []string
-}
+// var localHistory struct {
+//     historyList []string
+// }
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "HELLO WORLD!\n")
@@ -40,7 +41,6 @@ func prepare() {
 	DBInfo.Port = os.Getenv("db_port")
 	DBInfo.Database = os.Getenv("db_database")
 
-	linesHistory := fetchLocalHistory()
-
+	linesHistory := localHistory.FetchLocalHistory()
 	fmt.Println(linesHistory)
 }
