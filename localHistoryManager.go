@@ -21,16 +21,18 @@ const (
 	maxBufSize = 1000000
 )
 
-type LocalHistoryInfo struct {
-	historyList []OneLineHistory
-}
+// type LocalHistoryInfo struct {
+//     historyList []OneLineHistory
+// }
+
+type LinesHistory []OneLineHistory
 
 type OneLineHistory struct {
 	date    string
 	command string
 }
 
-func fetchLocalHistory() {
+func fetchLocalHistory() (linesHistory LinesHistory) {
 	fp, err := os.Open(HistoryFilePath)
 	defer fp.Close()
 
@@ -38,6 +40,7 @@ func fetchLocalHistory() {
 		panic(err)
 	}
 
+	// var linesHistory LinesHistory
 	scanner := bufio.NewScanner(fp)
 
 	// fmt.Println("-----------------------------------")
@@ -52,19 +55,18 @@ func fetchLocalHistory() {
 		// fmt.Println(nSec)
 		// fmt.Println(command)
 
-		// (convertTimeStampToDate(timeStamp, nSec))
 		date := convertTimeStampToDate(timeStamp, nSec)
-		// fmt.Println(date)
-		// fmt.Printf("HOGE=%s\n", date)
 
 		oneLineHistory := OneLineHistory{date, command}
-		fmt.Printf("HOGE=%s\n", oneLineHistory.command)
-		fmt.Printf("HOGE=%s\n", oneLineHistory.date)
+		// fmt.Printf("command=%s\n", oneLineHistory.command)
+		// fmt.Printf("date=%s\n", oneLineHistory.date)
+		linesHistory = append(linesHistory, oneLineHistory)
 	}
 
 	if err := scanner.Err(); err != nil {
 		fmt.Printf("Scanner error: %q\n", err)
 	}
+	return
 }
 
 func separateOneLine(oneline string) (timeStamp int64, nSec int64, command string) {

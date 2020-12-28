@@ -3,7 +3,7 @@ package main
 import (
 	// "bufio"
 	// "database/sql"
-	// "fmt"
+	"fmt"
 	// _ "github.com/go-sql-driver/mysql"
 	"io"
 	"net/http"
@@ -40,5 +40,7 @@ func prepare() {
 	DBInfo.Port = os.Getenv("db_port")
 	DBInfo.Database = os.Getenv("db_database")
 
-	fetchLocalHistory()
+	linesHistory := fetchLocalHistory()
+
+	fmt.Println(linesHistory)
 }
