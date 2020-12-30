@@ -14,10 +14,10 @@ import (
 )
 
 type History struct {
-	id       string
-	username string
-	command  string
-	date     string
+	Id       string
+	Username string
+	Command  string
+	Date     string
 }
 
 func FetchLatestUserInfo(username string) History {
@@ -26,16 +26,13 @@ func FetchLatestUserInfo(username string) History {
 	Db := sqlConnect()
 	defer Db.Close()
 
-	// tableHistory
-	// query := fmt.Sprintf("INSERT INTO %s(%s, %s, %s) VALUES(?,?,?)",
-
 	Db.QueryRow(`
 				SELECT id, MAX(date), username, command
 				FROM shell_history2 where username = ?`, username).Scan(
-		&history.id,
-		&history.date,
-		&history.username,
-		&history.command)
+		&history.Id,
+		&history.Date,
+		&history.Username,
+		&history.Command)
 
 	return history
 }

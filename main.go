@@ -7,6 +7,7 @@ import (
 	// _ "github.com/go-sql-driver/mysql"
 	"historyKeeper/localHistory"
 	"historyKeeper/sqlManager"
+	"historyKeeper/utils"
 	"io"
 	"net/http"
 )
@@ -31,10 +32,17 @@ func main() {
 
 func prepare() {
 	sqlManager.Prepare()
+	// sqlManager.RegisterUser("test", "test")
+
+	history := sqlManager.FetchLatestUserInfo("rainbow")
+	fmt.Println(history.Date)
 
 	linesHistory := localHistory.FetchLocalHistory()
 	for _, oneLineHistory := range linesHistory {
-		sqlManager.InsertHistory("rainbow", oneLineHistory)
+		//dbの日付、ローカルシェルの日付を
+		// oneLineHistory.Date
+
+		sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
 		fmt.Println(oneLineHistory.Date)
 		fmt.Println(oneLineHistory.Command)
 	}
