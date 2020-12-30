@@ -10,21 +10,39 @@ import (
 	// "io"
 	// "net/http"
 	// "os"
-	"time"
+	// "time"
 )
 
-func fetchUserInfo() {
+type History struct {
+	id       string
+	username string
+	command  string
+	date     string
+}
 
+func FetchLatestUserInfo(username string) History {
+	history := History{}
+
+	Db := sqlConnect()
+	defer Db.Close()
+
+	// tableHistory
+	// query := fmt.Sprintf("INSERT INTO %s(%s, %s, %s) VALUES(?,?,?)",
+
+	Db.QueryRow(`
+				SELECT id, MAX(date), username, command
+				FROM shell_history2 where username = ?`, username).Scan(
+		&history.id,
+		&history.date,
+		&history.username,
+		&history.command)
+
+	return history
 }
 
 func showStoredZshHistory() {
 	Db := sqlConnect()
 	defer Db.Close()
-
-	// See "Important settings" section.
-	Db.SetConnMaxLifetime(time.Minute * 3)
-	Db.SetMaxOpenConns(10)
-	Db.SetMaxIdleConns(10)
 
 	rows, err := Db.Query("SELECT * FROM shell_history")
 	if err != nil {
