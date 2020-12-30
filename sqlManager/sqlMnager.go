@@ -5,7 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"historyKeeper/localHistory"
+	// "historyKeeper/localHistory"
+	// "historyKeeper/utils"
 	// "io"
 	// "net/http"
 	"os"
@@ -26,6 +27,7 @@ func Prepare() {
 	dBInfo.password = os.Getenv("db_password")
 	dBInfo.port = os.Getenv("db_port")
 	dBInfo.database = os.Getenv("db_database")
+
 }
 
 func sqlConnect() *sql.DB {
@@ -36,32 +38,45 @@ func sqlConnect() *sql.DB {
 	if err != nil {
 		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
-	// defer Db.Close()
+	// sql.Time_zone
+	Db.SetConnMaxLifetime(time.Minute * 3)
+	Db.SetMaxOpenConns(10)
+	Db.SetMaxIdleConns(10)
 
 	return Db
 }
 
-func InsertZshHistory(linesHistory localHistory.OneLineHistory) {
-	Db := sqlConnect()
-	defer Db.Close()
+/*
+ * heroku local webで実行する必要がある
+ */
+// func InsertZshHistory(query string, linesHistory localHistory.OneLineHistory) {
+//     Db := sqlConnect()
+//     defer Db.Close()
 
-	fmt.Println(linesHistory)
-	stmtIns, err := Db.Prepare("INSERT INTO shell_history(name) VALUES( ? )") // ? = placeholder
+//     fmt.Println(linesHistory.Date)
+//     fmt.Println(linesHistory.Command)
 
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
-	}
+//     // var latestHistory = showLatestZshHistory()
 
-	defer stmtIns.Close() // Close the statement when we leave main() / the program terminates
+//     //dbの最新保存日付より新しい日付のローカル履歴があれば保存する
 
-	// _, err = stmtIns.Exec("aaa") // Insert tuples (i, i^2)
+//     stmtIns, err := Db.Prepare(query) // ? = placeholder
+//     // stmtIns, err := Db.Prepare("INSERT INTO t1(name, dt) VALUES(?,?)") // ? = placeholder
 
-	if err != nil {
-		// panic(err.Error()) // proper error handling instead of panic in your app
-	}
-}
+//     if err != nil {
+//         panic(err.Error()) // proper error handling instead of panic in your app
+//     }
 
-func showStoredZshHistory() {
+//     defer stmtIns.Close() // Close the statement when we leave main() / the program terminates
+
+//     _, err = stmtIns.Exec(linesHistory.Command, linesHistory.Date) // Insert tuples (i, i^2)
+
+//     if err != nil {
+//         // panic(err.Error()) // proper error handling instead of panic in your app
+//     }
+// }
+
+func showLatestZshHistory() string {
 	Db := sqlConnect()
 	defer Db.Close()
 
@@ -70,7 +85,7 @@ func showStoredZshHistory() {
 	Db.SetMaxOpenConns(10)
 	Db.SetMaxIdleConns(10)
 
-	rows, err := Db.Query("SELECT * FROM shell_history")
+	rows, err := Db.Query("SELECT MAX(dt),id FROM t1")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -109,14 +124,15 @@ func showStoredZshHistory() {
 
 			oneline += "  " + value
 
+			fmt.Println(value)
+			return value
 			// output := fmt.Sprintf("%s: %s\n", columns[i], value)
 			// io.WriteString(w, output)
 		}
-
-		// io.WriteString(w, oneline+"\n")
 	}
 
 	if err = rows.Err(); err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
+	return ""
 }

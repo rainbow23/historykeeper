@@ -3,7 +3,7 @@ package main
 import (
 	// "bufio"
 	// "database/sql"
-	// "fmt"
+	"fmt"
 	// _ "github.com/go-sql-driver/mysql"
 	"historyKeeper/localHistory"
 	"historyKeeper/sqlManager"
@@ -34,9 +34,9 @@ func prepare() {
 
 	linesHistory := localHistory.FetchLocalHistory()
 	for _, oneLineHistory := range linesHistory {
-		sqlManager.InsertZshHistory(oneLineHistory)
-		// fmt.Println(line.Date)
-		// fmt.Println(line.Command)
+		sqlManager.InsertHistory("rainbow", oneLineHistory)
+		fmt.Println(oneLineHistory.Date)
+		fmt.Println(oneLineHistory.Command)
 	}
 	// fmt.Println(linesHistory)
 }
