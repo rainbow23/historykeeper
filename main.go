@@ -10,14 +10,12 @@ import (
 	"historyKeeper/utils"
 	"io"
 	"net/http"
+	"time"
 )
 
-// type LinesHistory []OneLineHistory
-
-// type OneLineHistory struct {
-//     Date    string
-//     Command string
-// }
+const (
+	TimeFormat = "2006-01-02 15:04:05"
+)
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "HELLO WORLD!\n")
@@ -34,17 +32,22 @@ func prepare() {
 	sqlManager.Prepare()
 	// sqlManager.RegisterUser("test", "test")
 
-	history := sqlManager.FetchLatestUserInfo("rainbow")
-	fmt.Println(history.Date)
+	dbLatestHistory := sqlManager.FetchLatestUserInfo("rainbow")
+	fmt.Println("dbLatestHistory date =  " + dbLatestHistory.Date)
+	dbLatestTime, _ := time.Parse(TimeFormat, dbLatestHistory.Date)
 
 	linesHistory := localHistory.FetchLocalHistory()
 	for _, oneLineHistory := range linesHistory {
-		//dbの日付、ローカルシェルの日付を
-		// oneLineHistory.Date
+		//dbのuuidに紐づく最新日付より新しいシェル履歴がローカルにあれば追加する
+		localLatestTime, _ := time.Parse(TimeFormat, oneLineHistory.Date)
 
-		sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
-		fmt.Println(oneLineHistory.Date)
-		fmt.Println(oneLineHistory.Command)
+		if localLatestTime.After(dbLatestTime) {
+			fmt.Println("dbのuuidに紐づく最新日付より新しいシェル履歴がローカルにあれば追加する")
+			fmt.Println("dbLatestTime = " + dbLatestHistory.Date)
+			fmt.Println("localLatestTime = " + oneLineHistory.Date)
+			sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
+			fmt.Println("command = " + oneLineHistory.Command)
+		}
 	}
 	// fmt.Println(linesHistory)
 }

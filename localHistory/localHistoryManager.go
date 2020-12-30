@@ -12,7 +12,7 @@ import (
 
 const (
 	historyFilePath = "/Users/rainbow/.zsh_history"
-
+	TimeFormat      = "2006-01-02 15:04:05"
 	// 初期バッファサイズ
 	initialBufSize = 10000
 	// initialBufSize = 1
@@ -111,7 +111,7 @@ func cutOffOneline(regexPattern string, oneLine string) string {
 
 func convertTimeStampToDate(timeStamp int64, nsec int64) string {
 	if timeStamp != 0 {
-		return time.Unix(timeStamp, nsec).Format("2006-01-02 15:04:05")
+		return time.Unix(timeStamp, nsec).Format(TimeFormat)
 	}
 	return ""
 }
