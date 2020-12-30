@@ -22,14 +22,18 @@ func InsertHistory(username string, linesHistory localHistory.OneLineHistory) {
 	// output := fmt.Sprintf("%s: %s\n", columns[i], value)
 
 	// stmtIns, err := Db.Prepare("INSERT INTO t1(name, dt) VALUES(?,?)") // ? = placeholder
+
 	insertTemplate(query, username, linesHistory.Command, linesHistory.Date)
 }
 
 /*
  * heroku local webで実行する必要がある
  */
-func insertTemplate(query string, data ...interface{}) {
-	// func InsertTemplate(query string, data ...string) {
+func insertTemplate(query string, username string, command string, date string) {
+	if command == "" || date == "" {
+		return
+	}
+
 	Db := sqlConnect()
 	defer Db.Close()
 
@@ -39,15 +43,16 @@ func insertTemplate(query string, data ...interface{}) {
 	// stmtIns, err := Db.Prepare("INSERT INTO t1(name, dt) VALUES(?,?)") // ? = placeholder
 
 	if err != nil {
+		fmt.Println("err first")
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 
 	defer stmtIns.Close() // Close the statement when we leave main() / the program terminates
 
-	_, err = stmtIns.Exec(data) // Insert tuples (i, i^2)
+	_, err = stmtIns.Exec(username, command, date) // Insert tuples (i, i^2)
 
-	// func (s *Stmt) Exec(args ...interface{}) (Result, error) {
 	if err != nil {
+		fmt.Println("err second")
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 }
