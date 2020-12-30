@@ -9,5 +9,10 @@
 			"revisionTime": "2020-11-27T13:54:36Z"
 		}
 	],
-	"rootPath": "history_keeper"
+    "rootPath": [
+        "history_keeper",
+        "historyKeeper/localHistory",
+        "historyKeeper/sqlManager",
+        "historyKeeper/utils"
+    ]
 }
