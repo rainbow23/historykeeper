@@ -1,52 +1,45 @@
-package main
+package sqlManager
 
 import (
 	// "bufio"
 	"database/sql"
-	"fmt"
+	// "fmt"
+	_ "github.com/go-sql-driver/mysql"
+	// "historyKeeper/localHistory"
+	// "historyKeeper/utils"
 	// "io"
 	// "net/http"
 	// "os"
-	"time"
+	// "time"
 )
 
-func sqlConnect() *sql.DB {
-	var Db *sql.DB
-	var err error
-
-	Db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DBInfo.Username, DBInfo.Password, DBInfo.Host, DBInfo.Port, DBInfo.Database))
-	if err != nil {
-		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
-	}
-	// defer Db.Close()
-
-	return Db
+type History struct {
+	Id       string
+	Username string
+	Command  string
+	Date     string
 }
 
-func insertZshHistory() {
+func FetchLatestUserInfo(username string) History {
+	history := History{}
+
 	Db := sqlConnect()
 	defer Db.Close()
 
-	stmtIns, err := Db.Prepare("INSERT INTO shell_history(name) VALUES( ? )") // ? = placeholder
+	Db.QueryRow(`
+				SELECT id, MAX(date), username, command
+				FROM shell_history2 where username = ?`, username).Scan(
+		&history.Id,
+		&history.Date,
+		&history.Username,
+		&history.Command)
 
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
-	}
-	defer stmtIns.Close()        // Close the statement when we leave main() / the program terminates
-	_, err = stmtIns.Exec("aaa") // Insert tuples (i, i^2)
-	if err != nil {
-		// panic(err.Error()) // proper error handling instead of panic in your app
-	}
+	return history
 }
 
 func showStoredZshHistory() {
 	Db := sqlConnect()
 	defer Db.Close()
-
-	// See "Important settings" section.
-	Db.SetConnMaxLifetime(time.Minute * 3)
-	Db.SetMaxOpenConns(10)
-	Db.SetMaxIdleConns(10)
 
 	rows, err := Db.Query("SELECT * FROM shell_history")
 	if err != nil {
