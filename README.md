@@ -71,6 +71,7 @@ create table shell_history2(\
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
     username    VARCHAR(64) NOT NULL,\
     command     VARCHAR(256) NOT NULL,\
+    uuid        VARCHAR(64),\
     date        DATETIME     NOT NULL,\
     CONSTRAINT fk_username\
         foreign key (username)\
