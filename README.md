@@ -5,18 +5,14 @@ git:remote -a historykeeper
 ----------------------------
 
 ## build process
+1. exec below command
 ```
 govendor init
 govendor fetch +out
 ```
-
-1. add line in Procfile 
+2. add line in Procfile
 ```
-web: bin/history_keeper
-```
-2.add line in vendor/vendor.json
-```
- "rootPath": "history_keeper"
+web: bin/historyKeeper
 ```
 3. deploy app
 ```
@@ -24,7 +20,7 @@ git push -u origin main
 ```
 4. open app
 ```
-heroku open 
+heroku open
 ```
 ----------------------------
 
@@ -41,7 +37,7 @@ heroku config:get db_username -s  >> .env
 ```
 2. created bin folder Procfile definition↓
 ```
-go build -o bin/history_keeper -v .
+go build -o bin/historyKeeper -v .
 ```
 3. deploy app
 ```
