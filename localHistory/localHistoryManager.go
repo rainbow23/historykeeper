@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	historyFilePath = "/Users/rainbow/.zsh_history"
-	TimeFormat      = "2006-01-02 15:04:05"
+	// historyFilePath = "/Users/rainbow/.zsh_history"
+	TimeFormat = "2006-01-02 15:04:05"
 	// 初期バッファサイズ
 	initialBufSize = 10000
 	// initialBufSize = 1
@@ -32,8 +32,8 @@ type OneLineHistory struct {
 	Command string
 }
 
-func FetchLocalHistory() (linesHistory LinesHistory) {
-	fp, err := os.Open(historyFilePath)
+func FetchLocalHistory(historyPath string) (linesHistory LinesHistory) {
+	fp, err := os.Open(historyPath)
 	defer fp.Close()
 
 	if err != nil {
@@ -49,7 +49,7 @@ func FetchLocalHistory() (linesHistory LinesHistory) {
 	scanner.Buffer(buf, maxBufSize)
 
 	for scanner.Scan() {
-		fmt.Println("-----------------------------------")
+		//fmt.Println("-----------------------------------")
 		timeStamp, nSec, command := separateOneLine(scanner.Text())
 		// fmt.Println(timeStamp)
 		// fmt.Println(nSec)
