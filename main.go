@@ -32,6 +32,10 @@ func main() {
 
 var templates = template.Must(template.ParseFiles("templates/index.html", "templates/show.html"))
 
+func prepare() {
+	sqlManager.Prepare()
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{"Title": "index"}
 	renderTemplate(w, "index", data)
@@ -41,10 +45,6 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	if err := templates.ExecuteTemplate(w, tmpl+".html", data); err != nil {
 		log.Fatalln("Unable to execute template.")
 	}
-}
-
-func prepare() {
-	sqlManager.Prepare()
 }
 
 func ShowAllHandler(w http.ResponseWriter, r *http.Request) {

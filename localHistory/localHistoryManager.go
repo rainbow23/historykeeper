@@ -89,6 +89,12 @@ func separateOneLine(oneline string) (timeStamp int64, nSec int64, command strin
 	if isFoundPattern(patternCommand, oneline) {
 		command = cutOffOneline(patternCommand, oneline)
 		command = command[2:]
+	} else {
+		//タイムスタンプがない場合、最初の文字からコマンドがあるパターン
+		patternCommandOnly := "^[a-z]+.*$"
+		if isFoundPattern(patternCommandOnly, oneline) {
+			command = oneline
+		}
 	}
 
 	return
@@ -113,5 +119,5 @@ func convertTimeStampToDate(timeStamp int64, nsec int64) string {
 	if timeStamp != 0 {
 		return time.Unix(timeStamp, nsec).Format(TimeFormat)
 	}
-	return ""
+	return time.Now().Format(TimeFormat)
 }
