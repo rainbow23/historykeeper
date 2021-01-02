@@ -119,5 +119,13 @@ func convertTimeStampToDate(timeStamp int64, nsec int64) string {
 	if timeStamp != 0 {
 		return time.Unix(timeStamp, nsec).Format(TimeFormat)
 	}
-	return time.Now().Format(TimeFormat)
+
+	nowUTC := time.Now().UTC()
+	fmt.Println("localHisotry nowUTC = " + nowUTC.Format(time.RFC3339))
+
+	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+	nowJST := nowUTC.In(jst)
+	fmt.Println("localHisotry nowJST = " + nowJST.Format(time.RFC3339))
+
+	return nowJST.Format(TimeFormat)
 }
