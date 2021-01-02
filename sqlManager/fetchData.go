@@ -28,7 +28,7 @@ func FetchLatestUserInfo(username string) History {
 
 	Db.QueryRow(`
 				SELECT id, MAX(date), username, command
-				FROM shell_history2 where username = ?`, username).Scan(
+				FROM shell_history where username = ?`, username).Scan(
 		&history.Id,
 		&history.Date,
 		&history.Username,

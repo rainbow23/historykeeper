@@ -63,10 +63,10 @@ CREATE TABLE user_info( \
 ```
 
 ```
-create table shell_history2(\
+create table shell_history(\
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
     username    VARCHAR(64) NOT NULL,\
-    command     VARCHAR(256) NOT NULL,\
+    command     VARCHAR(256) NOT NULL UNIQUE,\
     date        DATETIME     NOT NULL,\
     CONSTRAINT fk_username\
         foreign key (username)\

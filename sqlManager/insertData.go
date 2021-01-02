@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	tableHistory  = "shell_history2"
+	tableHistory  = "shell_history"
 	tableUserInfo = "user_info"
 )
 
