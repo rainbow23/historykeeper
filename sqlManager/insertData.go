@@ -13,11 +13,11 @@ const (
 	tableUserInfo = "user_info"
 )
 
-func InsertHistory(username string, linesHistory localHistory.OneLineHistory, uuid string) {
-	query := fmt.Sprintf("INSERT INTO %s(%s, %s, %s, %s) VALUES(?,?,?,?)",
-		tableHistory, "username", "command", "date", "uuid")
+func InsertHistory(username string, linesHistory localHistory.OneLineHistory) {
+	query := fmt.Sprintf("INSERT INTO %s(%s, %s, %s) VALUES(?,?,?)",
+		tableHistory, "username", "command", "date")
 
-	insertTemplate(query, username, linesHistory.Command, linesHistory.Date, uuid)
+	insertTemplate(query, username, linesHistory.Command, linesHistory.Date)
 }
 
 func RegisterUser(username string, password string) {
@@ -59,7 +59,7 @@ func register(query string, username string, password string) {
 	}
 }
 
-func insertTemplate(query string, username string, command string, date string, uuid string) {
+func insertTemplate(query string, username string, command string, date string) {
 	if command == "" || date == "" {
 		return
 	}
@@ -79,7 +79,7 @@ func insertTemplate(query string, username string, command string, date string, 
 	defer stmtIns.Close() // Close the statement when we leave main() / the program terminates
 
 	//後にcommand, date 抽象化する
-	_, err = stmtIns.Exec(username, command, date, uuid) // Insert tuples (i, i^2)
+	_, err = stmtIns.Exec(username, command, date) // Insert tuples (i, i^2)
 
 	if err != nil {
 		fmt.Println("insertData " + err.Error())

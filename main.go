@@ -7,7 +7,6 @@ import (
 	// _ "github.com/go-sql-driver/mysql"
 	"historyKeeper/localHistory"
 	"historyKeeper/sqlManager"
-	"historyKeeper/utils"
 	"io"
 	"log"
 	"net/http"
@@ -117,7 +116,7 @@ func updateHistory(historyPath string) {
 			fmt.Println(" ")
 			if len(oneLineHistory.Command) > 0 {
 				fmt.Println("main command = " + oneLineHistory.Command)
-				sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
+				sqlManager.InsertHistory("rainbow", oneLineHistory)
 			}
 			/*
 			 * io.WriteString(w, "dbLatestTime = "+dbLatestHistory.Date+"\n")
