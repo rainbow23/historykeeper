@@ -58,8 +58,8 @@ func FetchLocalHistory(historyPath string) (linesHistory LinesHistory) {
 		date := convertTimeStampToDate(timeStamp, nSec)
 
 		oneLineHistory := OneLineHistory{date, command}
-		// fmt.Printf("command=%s\n", oneLineHistory.command)
-		// fmt.Printf("date=%s\n", oneLineHistory.date)
+		fmt.Printf("localHistory command=%s\n", oneLineHistory.Command)
+		fmt.Printf("localHistory date=%s\n", oneLineHistory.Date)
 		linesHistory = append(linesHistory, oneLineHistory)
 	}
 

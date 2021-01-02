@@ -100,29 +100,41 @@ func updateHistory(historyPath string) {
 	// func updateHistory(w http.ResponseWriter, r *http.Request) {
 
 	dbLatestHistory := sqlManager.FetchLatestUserInfo("rainbow")
-	fmt.Println("dbLatestHistory date =  " + dbLatestHistory.Date)
+	//ok
+	fmt.Println("main dbLatestHistory date =  " + dbLatestHistory.Date)
 	// io.WriteString(w, "dbLatestHistory date =  "+dbLatestHistory.Date+"\n")
 
 	dbLatestTime, _ := time.Parse(TimeFormat, dbLatestHistory.Date)
+	fmt.Println("main dbLatestTime  =  " + timeToString(dbLatestTime))
 
 	linesHistory := localHistory.FetchLocalHistory(historyPath)
 	for _, oneLineHistory := range linesHistory {
-		//dbのuuidに紐づく最新日付より新しいシェル履歴がローカルにあれば追加する
 		localLatestTime, _ := time.Parse(TimeFormat, oneLineHistory.Date)
-
+		//dbの最新日付より後のシェル履歴がある場合
 		if localLatestTime.After(dbLatestTime) {
-			fmt.Println("dbのuuidに紐づく最新日付より新しいシェル履歴がローカルにあれば追加する")
-			fmt.Println("dbLatestTime = " + dbLatestHistory.Date)
-			fmt.Println("localLatestTime = " + oneLineHistory.Date)
-			sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
-			fmt.Println("command = " + oneLineHistory.Command)
-
+			fmt.Println("main dbの最新日付より後のシェル履歴がある場合")
+			fmt.Println("main localLatestTime = " + oneLineHistory.Date)
+			fmt.Println(" ")
+			if len(oneLineHistory.Command) > 0 {
+				sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
+				fmt.Println("main command = " + oneLineHistory.Command)
+			}
 			/*
 			 * io.WriteString(w, "dbLatestTime = "+dbLatestHistory.Date+"\n")
 			 * io.WriteString(w, "localLatestTime = "+oneLineHistory.Date+"\n")
 			 * io.WriteString(w, "command = "+oneLineHistory.Command+"\n")
 			 */
+		} else {
+			fmt.Println("main dbの最新日付より古いシェル履歴の場合")
+			fmt.Println("main localLatestTime = " + oneLineHistory.Date)
+			fmt.Println(" ")
+
 		}
 	}
 	// fmt.Println(linesHistory)
+}
+
+func timeToString(t time.Time) string {
+	str := t.Format(TimeFormat)
+	return str
 }
