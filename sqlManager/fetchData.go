@@ -28,7 +28,7 @@ func FetchLatestUserInfo(username string) History {
 
 	Db.QueryRow(`
 				SELECT id, MAX(date), username, command
-				FROM shell_history where username = ?`, username).Scan(
+				FROM `+dBInfo.tableHistory+`where username = ?`, username).Scan(
 		&history.Id,
 		&history.Date,
 		&history.Username,
@@ -41,7 +41,7 @@ func showStoredZshHistory() {
 	Db := sqlConnect()
 	defer Db.Close()
 
-	rows, err := Db.Query("SELECT * FROM shell_history")
+	rows, err := Db.Query("SELECT * FROM " + dBInfo.tableHistory)
 	if err != nil {
 		panic(err.Error())
 	}

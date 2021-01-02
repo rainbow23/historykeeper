@@ -14,11 +14,13 @@ import (
 )
 
 var dBInfo struct {
-	host     string
-	username string
-	password string
-	port     string
-	database string
+	host          string
+	username      string
+	password      string
+	port          string
+	database      string
+	tableHistory  string
+	tableUserInfo string
 }
 
 func Prepare() {
@@ -27,7 +29,8 @@ func Prepare() {
 	dBInfo.password = os.Getenv("db_password")
 	dBInfo.port = os.Getenv("db_port")
 	dBInfo.database = os.Getenv("db_database")
-
+	dBInfo.tableHistory = os.Getenv("db_table_shell_hisotry")
+	dBInfo.tableUserInfo = os.Getenv("db_table_user_info")
 }
 
 func sqlConnect() *sql.DB {

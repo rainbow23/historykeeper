@@ -8,14 +8,9 @@ import (
 	"historyKeeper/localHistory"
 )
 
-const (
-	tableHistory  = "shell_history"
-	tableUserInfo = "user_info"
-)
-
 func InsertHistory(username string, linesHistory localHistory.OneLineHistory) {
 	query := fmt.Sprintf("INSERT INTO %s(%s, %s, %s) VALUES(?,?,?)",
-		tableHistory, "username", "command", "date")
+		dBInfo.tableHistory, "username", "command", "date")
 
 	insertTemplate(query, username, linesHistory.Command, linesHistory.Date)
 }
@@ -26,7 +21,7 @@ func RegisterUser(username string, password string) {
 	}
 
 	query := fmt.Sprintf("INSERT INTO %s(%s, %s) VALUES(?,?)",
-		tableUserInfo, "username", "password")
+		dBInfo.tableUserInfo, "username", "password")
 
 	register(query, username, password)
 }
