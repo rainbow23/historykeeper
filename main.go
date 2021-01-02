@@ -116,8 +116,8 @@ func updateHistory(historyPath string) {
 			fmt.Println("main localLatestTime = " + oneLineHistory.Date)
 			fmt.Println(" ")
 			if len(oneLineHistory.Command) > 0 {
-				sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
 				fmt.Println("main command = " + oneLineHistory.Command)
+				sqlManager.InsertHistory("rainbow", oneLineHistory, utils.FetchUUID())
 			}
 			/*
 			 * io.WriteString(w, "dbLatestTime = "+dbLatestHistory.Date+"\n")

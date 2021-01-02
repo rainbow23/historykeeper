@@ -72,7 +72,7 @@ func insertTemplate(query string, username string, command string, date string, 
 	stmtIns, err := Db.Prepare(query) // ? = placeholder
 
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("insertData " + err.Error())
 		// panic(err.Error()) // proper error handling instead of panic in your app
 	}
 
@@ -82,7 +82,7 @@ func insertTemplate(query string, username string, command string, date string, 
 	_, err = stmtIns.Exec(username, command, date, uuid) // Insert tuples (i, i^2)
 
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("insertData " + err.Error())
 		// panic(err.Error()) // proper error handling instead of panic in your app
 	}
 }
